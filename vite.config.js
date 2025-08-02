@@ -8,4 +8,9 @@ export default defineConfig({
     tailwindcss(),
     vue(),
   ],
+  server: {
+    proxy: {
+      '/video': "http://localhost:8080"
+    }
+  }
 })
