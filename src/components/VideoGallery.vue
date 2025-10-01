@@ -3,8 +3,8 @@
     <div v-for="video in videos" :key="video.id" class="group relative bg-[#2a2a2a2a] rounded-2xl cursor-pointer"
       @click="goToPlayer(video.id)">
       <!-- video preview as before -->
-      <video class="w-full h-full aspect-video rounded-2xl object-cover" :poster="video.thumbnailUrl" preload="none"
-        muted loop playsinline @mouseenter="playPreview($event, video.preview.id)"
+      <video class="w-full h-full aspect-video rounded-2xl object-cover" :poster="getThumbnailUrl(video.id)"
+        preload="none" muted loop playsinline @mouseenter="playPreview($event, video.preview.id)"
         @mouseleave="stopPreview($event)"></video>
       <div class="mt-2 text-sm text-center">{{ video.title }}</div>
     </div>
@@ -26,6 +26,10 @@ onMounted(async () => {
 function goToPlayer(id) {
   console.log(id)
   router.push({ name: 'Watch', params: { id } })
+}
+
+function getThumbnailUrl(id) {
+  return `/video/${id}/thumbnail`
 }
 
 function playPreview(event, url) {
