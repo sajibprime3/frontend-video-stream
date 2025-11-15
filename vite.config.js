@@ -10,7 +10,15 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/video': "http://localhost:8080"
+      '/playback': {
+        target: "http://localhost:8081",
+        changeOrigin: false
+      },
+      '/video': {
+        target: "http://localhost:8080",
+        changeOrigin: false
+      },
+
     }
   }
 })

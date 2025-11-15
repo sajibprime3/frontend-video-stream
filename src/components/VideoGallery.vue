@@ -1,12 +1,11 @@
 <template>
   <div class="p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-    <div v-for="video in videos" :key="video.id" class="group relative bg-[#2a2a2a2a] rounded-2xl cursor-pointer"
-      @click="goToPlayer(video.id)">
+    <div v-for="video in videos" :key="video.uuid" class="group relative bg-[#2a2a2a2a] rounded-2xl cursor-pointer"
+      @click="goToPlayer(video.uuid)">
       <!-- video preview as before -->
-      <video class="w-full h-full aspect-video rounded-2xl object-cover" :poster="getThumbnailUrl(video.id)"
-        preload="none" muted loop playsinline @mouseenter="playPreview($event, video.preview.id)"
+      <video class="w-full h-full aspect-video rounded-2xl object-cover" :poster="getThumbnailUrl(video.uuid)"
+        preload="none" muted loop playsinline @mouseenter="playPreview($event, video.uuid)"
         @mouseleave="stopPreview($event)"></video>
-      <div class="mt-2 text-sm text-center">{{ video.title }}</div>
     </div>
   </div>
 </template>
@@ -19,22 +18,22 @@ const videos = ref([])
 const router = useRouter()
 
 onMounted(async () => {
-  const res = await fetch('/video/info')
+  const res = await fetch('/video')
   videos.value = await res.json()
 })
 
-function goToPlayer(id) {
-  console.log(id)
-  router.push({ name: 'Watch', params: { id } })
+function goToPlayer(uuid) {
+  console.log(uuid)
+  router.push({ name: 'Watch', params: { uuid } })
 }
 
-function getThumbnailUrl(id) {
-  return `/video/${id}/thumbnail`
+function getThumbnailUrl(uuid) {
+  return `/playback/${uuid}/thumbnail`
 }
 
-function playPreview(event, url) {
+function playPreview(event, uuid) {
   const video = event.target
-  video.src = "/video/preview/" + url
+  video.src = "/playback/" + uuid + "/preview"
   video.play()
 }
 
