@@ -19,7 +19,12 @@ const routes = [
     path: "/upload",
     name: "upload",
     component: () => import('../views/UploadView.vue'),
-  }
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () => import('../views/LoginView.vue'),
+  },
 ]
 
 export default createRouter({

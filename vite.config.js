@@ -18,6 +18,11 @@ export default defineConfig({
         target: "http://localhost:8080",
         changeOrigin: false
       },
+      '/userservice': {
+        target: "http://localhost:8082",
+        changeOrigin: false,
+        rewrite: (path) => path.replace(/^\/userservice/, '')
+      },
 
     }
   }
