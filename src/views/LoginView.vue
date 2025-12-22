@@ -8,10 +8,9 @@
       <input class="block w-full mb-2" v-model="password" type="password" placeholder="Password"
         autocomplete="current-password" />
 
-      <div>
-        <button class="mr-2" @click="login">Login</button>
-        <button @click="me">Who am I?</button>
-        <button @click="logout">Logout</button>
+      <div class="flex ">
+        <button class="mr-2 p-2 px-4 bg-blue-600 font-bold text-white rounded-xl" @click="login">Login</button>
+        <button class="ml-auto" @click="me">Who am I?</button>
       </div>
 
       <p class="mt-4">{{ message }}</p>
@@ -44,23 +43,14 @@ async function login() {
 }
 
 async function me() {
-  const res = await fetch(`${API}/api/me`, {
+  const res = await fetch('/userservice/api/v1/users/me', {
     credentials: 'include'
   })
+  const obj = await res.json()
 
-  message.value = res.ok
-    ? await res.text()
-    : 'Not authenticated'
+  message.value = res.ok ? obj.id : 'Not authenticated'
 }
 
-async function logout() {
-  await fetch(`${API}/auth/logout`, {
-    method: 'POST',
-    credentials: 'include'
-  })
-
-  message.value = 'Logged out'
-}
 </script>
 
 <style scoped></style>
