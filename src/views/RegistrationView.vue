@@ -1,6 +1,7 @@
 <template>
+
   <div class="flex justify-center mt-24">
-    <div id="login-form"
+    <div id="registration-form"
       class="flex flex-col items-center justify-center gap-4 p-2 bg-[#23252e] shadow rounded-xl w-96">
       <div class="flex  text-4xl font-bold text-green-700 drop-shadow shadow-blue-800">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -11,7 +12,7 @@
         </svg>
         iTube
       </div>
-      <div class="m-2 text-sm">Login to Share Moments with everyone.</div>
+      <div class="m-2 text-sm">Create an Account and start sharing.</div>
       <div class="flex flex-col w-11/12 gap-4">
         <div class="relative flex items-center ">
           <input type="text" v-model="username" id="username" name="username"
@@ -19,6 +20,15 @@
             placeholder=" ">
           <label for="username"
             class="absolute px-1 text-xs text-teal-600 duration-100 -translate-y-5 bg-[#23252e] rounded border-x left-4 peer-focus:border-emerald-700 peer-placeholder-shown:text-gray-200 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-base peer-placeholder-shown:bg-inherit peer-placeholder-shown:px-0 peer-placeholder-shown:border-none peer-placeholder-shown:left-3">Username</label>
+
+        </div>
+
+        <div class="relative flex items-center ">
+          <input type="text" v-model="email" id="email" name="email"
+            class="w-full p-2 border border-gray-200 rounded-xl focus:border-emerald-700 focus:outline-none peer"
+            placeholder=" ">
+          <label for="email"
+            class="absolute px-1 text-xs text-teal-600 duration-100 -translate-y-5 bg-[#23252e] rounded border-x left-4 peer-focus:border-emerald-700 peer-placeholder-shown:text-gray-200 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-base peer-placeholder-shown:bg-inherit peer-placeholder-shown:px-0 peer-placeholder-shown:border-none peer-placeholder-shown:left-3">Email</label>
 
         </div>
         <div class="relative flex items-center ">
@@ -29,14 +39,14 @@
             class="absolute px-1 text-xs text-teal-600 duration-100 -translate-y-5 bg-[#23252e] rounded border-x left-4 peer-focus:border-emerald-700 peer-placeholder-shown:text-gray-200 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-base peer-placeholder-shown:bg-inherit peer-placeholder-shown:px-0 peer-placeholder-shown:border-none peer-placeholder-shown:left-3">Password</label>
 
         </div>
-        <button @click="login" class="p-1 font-bold text-white bg-emerald-700 rounded-xl hover:bg-emerald-600">
-          Login
+        <button @click="register()" class="p-1 font-bold text-white bg-emerald-700 rounded-xl hover:bg-emerald-600">
+          Register
         </button>
       </div>
       <div class="flex justify-between w-11/12">
-        <router-link to="/register"
+        <router-link to="/login"
           class="p-2 font-mono text-sm font-medium duration-75 hover:drop-shadow hover:-translate-y-1">
-          Create Account
+          Login
         </router-link>
         <a href="" class="p-2 font-mono text-sm font-medium duration-75 hover:drop-shadow hover:-translate-y-1">
           Need Help?
@@ -65,27 +75,26 @@
           </path>
         </svg>
       </div>
-      <div>Login Successfull</div>
-      <router-link to="/" class="p-1 px-8  font-bold text-white bg-emerald-700 rounded-xl hover:bg-emerald-600">
-        Go Back
+      <div>Account Created Successfully.</div>
+      <router-link to="/login" class="p-1 px-8  font-bold text-white bg-emerald-700 rounded-xl hover:bg-emerald-600">
+        Login
       </router-link>
     </div>
   </div>
-
-
-
 </template>
 <script setup>
+
 import { ref } from 'vue'
 
 const username = ref('')
 const password = ref('')
+const email = ref('')
 const message = ref('')
 
-async function login() {
+async function register() {
   message.value = ''
 
-  const res = await fetch('/userservice/api/v1/auth/login', {
+  const res = await fetch('/userservice/api/v1/users', {
     method: 'POST',
     credentials: 'include', // REQUIRED for HttpOnly cookies
     headers: {
@@ -93,23 +102,15 @@ async function login() {
     },
     body: JSON.stringify({
       username: username.value,
+      email: email.value,
       password: password.value
     })
   })
 
   if (res.ok) {
-    hide("#login-form", "flex", "hidden")
+    hide("#registration-form", "flex", "hidden")
     show("#success-msg", "flex", "hidden")
   }
-}
-
-async function me() {
-  const res = await fetch('/userservice/api/v1/users/me', {
-    credentials: 'include'
-  })
-  const obj = await res.json()
-
-  message.value = res.ok ? obj.id : 'Not authenticated'
 }
 
 function show(target, showClass, hideClass) {
@@ -127,5 +128,4 @@ function hide(target, showClass, hideClass) {
     node.classList.add(hideClass);
   });
 }
-
 </script>
